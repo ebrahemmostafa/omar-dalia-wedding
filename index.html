@@ -72,6 +72,12 @@ section{position:relative;z-index:2}
 .swatch .chip{width:72px;height:72px;border-radius:50%;border:1px solid rgba(62,44,28,.15);box-shadow:0 6px 20px rgba(62,44,28,.08)}
 .swatch .name{font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--sage-dark)}
 .swatch .ar{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--brown)}
+.dc-people{position:relative;max-width:820px;margin:-6rem auto -5rem;aspect-ratio:1920/1280;clip-path:inset(20% 0 22% 0);animation:dcSway 3.2s ease-in-out infinite}
+.dc-people img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;mix-blend-mode:multiply}
+.dc-people .f2{animation:dcSwap 4s ease-in-out infinite}
+@keyframes dcSwap{0%,40%{opacity:0}50%,90%{opacity:1}100%{opacity:0}}
+@keyframes dcSway{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-6px) rotate(-.4deg)}}
+@media(prefers-reduced-motion:reduce){.dc-people,.dc-people .f2{animation:none}}
 .dresscode .ar-line{margin-top:2.5rem;font-size:1.2rem;color:var(--brown)}
 .schedule{padding:8rem 2rem;text-align:center;background:var(--bg)}
 .schedule-items{max-width:600px;margin:0 auto;position:relative}
@@ -156,7 +162,8 @@ footer .bottom{margin-top:4rem;padding-top:2rem;border-top:1px solid rgba(135,16
 <section class="venue reveal" id="venue"><div class="bg"><span class="eyebrow">Where it happens</span><h2 class="serif">Maqam</h2><p>Join us at Maqam on Sunday, the first of November, as we begin our forever together.</p><a href="https://maps.app.goo.gl/ijosdueexRzmHR4A9?g_st=ic" class="map-btn" target="_blank" rel="noopener">Open in Maps →</a></div></section>
 <section class="dresscode" id="dresscode">
 <div class="section-head reveal" style="margin-bottom:2.5rem"><span class="eyebrow">What to wear</span><h2>Dress code</h2></div>
-<div class="reveal"><p class="attire">Black Tie Attire</p>
+<div class="reveal"><div class="dc-people" aria-hidden="true"><img src="images/dresscode-frame-1.png" alt="" class="f1"><img src="images/dresscode-frame-2.png" alt="" class="f2"></div>
+<p class="attire">Black Tie Attire</p>
 <p class="attire-note">Suits or smart casual for men · Dresses for girls in baby pink or olive</p>
 <div class="swatches">
 <div class="swatch"><div class="chip" style="background:#FFFFFF"></div><span class="name">White</span><span class="ar" lang="ar">أبيض</span></div>
