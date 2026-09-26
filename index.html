@@ -33,24 +33,9 @@ section{position:relative;z-index:2}
 .couple h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2.5rem,6vw,5rem);font-weight:300;color:var(--brown);line-height:1.2}
 .couple h2 em{color:var(--sage-dark);font-style:italic}
 .couple .tagline{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;color:var(--terra);margin-top:1.5rem}
-.story{padding:6rem 2rem;background:linear-gradient(180deg,var(--bg),#F0EBE0,var(--bg))}
 .section-head{text-align:center;margin-bottom:5rem}
 .section-head .eyebrow{font-size:.65rem;letter-spacing:.4em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:.5rem}
 .section-head h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;font-style:italic;color:var(--brown)}
-.timeline{max-width:900px;margin:0 auto;position:relative}
-.timeline::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--sage),transparent);transform:translateX(-50%)}
-.timeline .event{display:flex;align-items:center;gap:3rem;margin-bottom:5rem;position:relative}
-.timeline .event:nth-child(even){flex-direction:row-reverse}
-.timeline .event .img-wrap{flex:1;overflow:hidden;border-radius:8px;border:1px solid rgba(135,168,120,.2);box-shadow:0 10px 40px rgba(62,44,28,.08)}
-.timeline .event .img-wrap img{width:100%;display:block;transition:transform .6s}
-.timeline .event .img-wrap:hover img{transform:scale(1.05)}
-.timeline .event .content{flex:1}
-.timeline .event .year{font-size:.65rem;letter-spacing:.3em;color:var(--sage-dark);text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
-.timeline .event .year::before{content:'🌿';font-size:.7rem}
-.timeline .event h3{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:400;font-style:italic;color:var(--brown);margin-bottom:.5rem}
-.timeline .event .line{width:50px;height:1px;background:var(--sage);margin-bottom:1rem}
-.timeline .event p{font-size:.9rem;line-height:1.8;color:var(--text);font-weight:200}
-.timeline .dot{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:var(--sage);border:2px solid var(--bg);z-index:1}
 .countdown-section{padding:8rem 2rem;text-align:center;background:var(--bg)}
 .countdown-section h2{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:300;font-style:italic;color:var(--brown);margin-bottom:3rem}
 .countdown{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap}
@@ -123,9 +108,6 @@ footer .bottom{margin-top:4rem;padding-top:2rem;border-top:1px solid rgba(135,16
 @media(max-width:768px){
 .hero .info-bar{flex-direction:column;gap:1rem;padding:1.5rem}
 .hero .info-bar .sep{width:80%;height:1px;margin:0 auto}
-.timeline::before{left:20px}
-.timeline .event,.timeline .event:nth-child(even){flex-direction:column;gap:1.5rem;padding-left:50px}
-.timeline .dot{left:20px;top:0;transform:translateX(-50%)}
 .schedule-item,.schedule-item:nth-child(odd){flex-direction:column!important;text-align:center!important;gap:.5rem}
 .schedule-items::before{display:none}
 .countdown .unit{min-width:70px;padding:1rem}
@@ -150,14 +132,6 @@ footer .bottom{margin-top:4rem;padding-top:2rem;border-top:1px solid rgba(135,16
 <div class="scroll-hint"><span>Scroll</span><div class="arrow"></div></div>
 </section>
 <section class="couple reveal"><span class="eyebrow">Two hearts</span><h2 class="serif">Omar <em>&amp;</em> Dalia</h2><p class="tagline">Where love meets the Mediterranean sun</p></section>
-<section class="story" id="story">
-<div class="section-head reveal"><span class="eyebrow">Our Story</span><h2>how it all began</h2></div>
-<div class="timeline">
-<div class="event reveal"><div class="dot"></div><div class="img-wrap"><img src="images/story1.png" alt="First meeting"></div><div class="content"><span class="year">2020</span><h3>A Tuscan afternoon</h3><div class="line"></div><p>Between golden vineyards and old stone walls, two paths crossed at a small market. The scent of fresh herbs and the warmth of a shared smile began it all.</p></div></div>
-<div class="event reveal"><div class="dot"></div><div class="img-wrap"><img src="images/story2.png" alt="Adventures"></div><div class="content"><span class="year">2022</span><h3>Coastal wanderings</h3><div class="line"></div><p>They chased sunsets along the Amalfi coast, collected seashells, and made promises that tasted like salt and honey on summer evenings.</p></div></div>
-<div class="event reveal"><div class="dot"></div><div class="img-wrap"><img src="images/story3.png" alt="Proposal"></div><div class="content"><span class="year">2025</span><h3>Under the olive tree</h3><div class="line"></div><p>In the garden where her grandmother once danced, beneath an ancient olive tree, he asked the only question that ever mattered.</p></div></div>
-</div>
-</section>
 <section class="countdown-section reveal" id="countdown"><span class="eyebrow section-head">Counting every moment</span><h2>until forever</h2><div class="countdown" id="countdownTimer"><div class="unit"><div class="num" id="cd-days">000</div><div class="lbl">Days</div></div><div class="unit"><div class="num" id="cd-hours">00</div><div class="lbl">Hours</div></div><div class="unit"><div class="num" id="cd-mins">00</div><div class="lbl">Minutes</div></div><div class="unit"><div class="num" id="cd-secs">00</div><div class="lbl">Seconds</div></div></div></section>
 <section class="venue reveal" id="venue"><div class="bg"><span class="eyebrow">Where it happens</span><h2 class="serif">Maqam</h2><p>Join us at Maqam on Sunday, the first of November, as we begin our forever together.</p><a href="https://maps.app.goo.gl/ijosdueexRzmHR4A9?g_st=ic" class="map-btn" target="_blank" rel="noopener">Open in Maps →</a></div></section>
 <section class="dresscode" id="dresscode">
