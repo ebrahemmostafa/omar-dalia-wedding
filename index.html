@@ -162,7 +162,8 @@ footer .bottom{margin-top:4rem;padding-top:2rem;border-top:1px solid rgba(135,16
 <p class="thank-you" id="thankYou">Thank you, beautifully received.<br>We can't wait to see you in November.</p>
 </section>
 <footer><span class="eyebrow">With all our love</span><h2 class="serif">We can't wait<br><em>to celebrate with you.</em></h2><div class="divider"></div><p class="names">Omar &amp; Dalia</p><div class="bottom">forever, beginning november first · Maqam · 2026</div></footer>
-<div class="music-btn" id="musicBtn"><div class="bars"><span style="height:4px"></span><span style="height:8px"></span><span style="height:6px"></span><span style="height:10px"></span></div>Music</div>
+<audio id="bgMusic" src="audio/zaffa.mp3" loop preload="auto"></audio>
+<div class="music-btn" id="musicBtn" role="button" aria-label="Play or pause music"><div class="bars"><span style="height:4px"></span><span style="height:8px"></span><span style="height:6px"></span><span style="height:10px"></span></div>Music</div>
 <script>
 const canvas=document.getElementById('particles'),ctx=canvas.getContext('2d');let W,H,leaves=[];
 function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
@@ -180,8 +181,14 @@ const wedding=new Date('2026-11-01T17:30:00');
 function updateCD(){const now=new Date(),diff=wedding-now;if(diff<=0)return;const d=Math.floor(diff/864e5),h=Math.floor(diff%864e5/36e5),m=Math.floor(diff%36e5/6e4),s=Math.floor(diff%6e4/1e3);document.getElementById('cd-days').textContent=String(d).padStart(3,'0');document.getElementById('cd-hours').textContent=String(h).padStart(2,'0');document.getElementById('cd-mins').textContent=String(m).padStart(2,'0');document.getElementById('cd-secs').textContent=String(s).padStart(2,'0')}
 updateCD();setInterval(updateCD,1000);
 document.getElementById('rsvpForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('rsvpForm').style.display='none';document.getElementById('thankYou').style.display='block'});
-const musicBtn=document.getElementById('musicBtn');let playing=false;
-musicBtn.addEventListener('click',()=>{playing=!playing;musicBtn.classList.toggle('playing',playing)});
+const musicBtn=document.getElementById('musicBtn'),bgMusic=document.getElementById('bgMusic');let userPaused=false;
+bgMusic.volume=.6;
+bgMusic.addEventListener('play',()=>musicBtn.classList.add('playing'));
+bgMusic.addEventListener('pause',()=>musicBtn.classList.remove('playing'));
+function startMusic(){if(!userPaused&&bgMusic.paused)bgMusic.play().catch(()=>{})}
+startMusic();
+['pointerdown','keydown','touchend'].forEach(ev=>document.addEventListener(ev,e=>{if(!musicBtn.contains(e.target))startMusic()},{passive:true}));
+musicBtn.addEventListener('click',()=>{if(bgMusic.paused){userPaused=false;bgMusic.play().catch(()=>{})}else{userPaused=true;bgMusic.pause()}});
 </script>
 <script src="../invitation-language-switch.js"></script>
 </body>
