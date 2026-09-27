@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>Omar &amp; Dalia — RSVPs</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--sage:#87A878;--sage-dark:#5C7A4E;--cream:#FDF8F0;--terra:#C67C4E;--brown:#3E2C1C;--text:#5A4E3E;--bg:#FAF5ED;--line:rgba(135,168,120,.3);--red:#B04A3A}
+body{font-family:'Josefin Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.wrap{max-width:900px;margin:0 auto;padding:3rem 1rem 5rem}
+header{text-align:center;margin-bottom:2.5rem}
+.eyebrow{font-size:.65rem;letter-spacing:.4em;text-transform:uppercase;color:var(--sage-dark)}
+h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:clamp(2.2rem,6vw,3.5rem);color:var(--brown);margin-top:.4rem}
+h1 em{font-style:italic;color:var(--sage-dark)}
+.card{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:2rem 1.5rem}
+.login{max-width:380px;margin:0 auto;display:flex;flex-direction:column;gap:1rem}
+.login p{font-size:.85rem;line-height:1.6;text-align:center}
+input,select{width:100%;padding:.9rem 1rem;background:#fff;border:1px solid var(--line);border-radius:6px;font:inherit;font-size:.85rem;color:var(--brown);outline:none}
+input:focus,select:focus{border-color:var(--sage-dark)}
+button{padding:.85rem 1.6rem;border:1px solid var(--sage-dark);background:var(--sage-dark);color:#fff;border-radius:50px;font:inherit;font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;cursor:pointer;transition:opacity .2s}
+button:hover{opacity:.85}
+button.ghost{background:transparent;color:var(--sage-dark)}
+button:disabled{opacity:.4;cursor:default}
+.err{color:var(--red);font-size:.8rem;text-align:center;min-height:1.2em}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:1.2rem;text-align:center}
+.stat .n{font-family:'Cormorant Garamond',serif;font-size:2.6rem;color:var(--brown);line-height:1}
+.stat .l{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--sage-dark);margin-top:.4rem}
+.stat.yes .n{color:var(--sage-dark)}.stat.no .n{color:var(--terra)}
+.toolbar{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
+.toolbar input{flex:1;min-width:180px}
+.toolbar select{width:auto}
+.list{display:flex;flex-direction:column;gap:.9rem}
+.rsvp{background:var(--cream);border:1px solid var(--line);border-left:4px solid var(--sage);border-radius:10px;padding:1.1rem 1.25rem}
+.rsvp.no{border-left-color:var(--terra)}
+.rsvp .top{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;flex-wrap:wrap}
+.rsvp .name{font-family:'Cormorant Garamond',serif;font-size:1.45rem;color:var(--brown)}
+.rsvp .badge{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;padding:.3rem .7rem;border-radius:50px;background:rgba(135,168,120,.18);color:var(--sage-dark);white-space:nowrap}
+.rsvp.no .badge{background:rgba(198,124,78,.15);color:var(--terra)}
+.rsvp .msg{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.15rem;line-height:1.55;color:var(--text);margin-top:.5rem;white-space:pre-wrap;word-break:break-word}
+.rsvp .meta{display:flex;justify-content:space-between;align-items:center;margin-top:.6rem;font-size:.7rem;opacity:.75}
+.rsvp .del{background:none;border:none;color:var(--red);padding:0;font-size:.65rem;letter-spacing:.15em;opacity:.8}
+.empty{text-align:center;padding:3rem 1rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.3rem}
+.hidden{display:none!important}
+.setup{max-width:560px;margin:0 auto;font-size:.85rem;line-height:1.7}
+.setup code{background:#fff;border:1px solid var(--line);padding:.1rem .35rem;border-radius:4px;font-size:.8rem}
+@media(max-width:560px){.stats{gap:.5rem}.stat{padding:.9rem .4rem}.stat .n{font-size:2rem}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><span class="eyebrow">Guest replies</span><h1>Omar <em>&amp;</em> Dalia</h1></header>
+
+<div class="card setup hidden" id="setupView">
+<p><strong>Not connected yet.</strong> Add the project's anon / publishable key to <code>supabase-config.js</code>, and run <code>supabase/rsvps.sql</code> in the Supabase SQL Editor.</p>
+</div>
+
+<form class="card login hidden" id="loginView">
+<p>Sign in to see RSVPs and messages.</p>
+<input type="email" id="email" placeholder="Email" autocomplete="username" required>
+<input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+<button type="submit" id="loginBtn">Sign in</button>
+<div class="err" id="loginErr"></div>
+</form>
+
+<main class="hidden" id="appView">
+<div class="stats">
+<div class="stat"><div class="n" id="sTotal">0</div><div class="l">Replies</div></div>
+<div class="stat yes"><div class="n" id="sYes">0</div><div class="l">Attending</div></div>
+<div class="stat no"><div class="n" id="sNo">0</div><div class="l">Declined</div></div>
+</div>
+<div class="toolbar">
+<input type="search" id="search" placeholder="Search names or messages">
+<select id="filter"><option value="all">Everyone</option><option value="yes">Attending</option><option value="no">Declined</option><option value="msg">With a message</option></select>
+<button type="button" class="ghost" id="refreshBtn">Refresh</button>
+<button type="button" class="ghost" id="csvBtn">Export CSV</button>
+<button type="button" class="ghost" id="logoutBtn">Sign out</button>
+</div>
+<div class="err" id="appErr"></div>
+<div class="list" id="list"></div>
+</main>
+</div>
+
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const $=id=>document.getElementById(id);
+const show=v=>['setupView','loginView','appView'].forEach(k=>$(k).classList.toggle('hidden',k!==v));
+let rows=[];
+
+if(!window.SUPABASE_ANON_KEY||!window.supabase){show('setupView')}else{
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+
+async function load(){
+  $('appErr').textContent='';
+  const {data,error}=await sb.from('rsvps').select('id,created_at,name,attending,message').order('created_at',{ascending:false});
+  if(error){$('appErr').textContent='Could not load RSVPs: '+error.message;return}
+  rows=data;render();
+}
+
+function render(){
+  $('sTotal').textContent=rows.length;
+  $('sYes').textContent=rows.filter(r=>r.attending).length;
+  $('sNo').textContent=rows.filter(r=>!r.attending).length;
+  const q=$('search').value.trim().toLowerCase(),f=$('filter').value;
+  const shown=rows.filter(r=>(f==='all'||(f==='yes'&&r.attending)||(f==='no'&&!r.attending)||(f==='msg'&&r.message))&&(!q||(r.name+' '+(r.message||'')).toLowerCase().includes(q)));
+  const list=$('list');list.replaceChildren();
+  if(!shown.length){const e=document.createElement('div');e.className='empty';e.textContent=rows.length?'No replies match.':'No replies yet.';list.append(e);return}
+  for(const r of shown){
+    const el=document.createElement('article');el.className='rsvp'+(r.attending?'':' no');
+    el.innerHTML='<div class="top"><span class="name"></span><span class="badge"></span></div><p class="msg"></p><div class="meta"><time></time><button type="button" class="del">Delete</button></div>';
+    el.querySelector('.name').textContent=r.name;
+    el.querySelector('.badge').textContent=r.attending?'Joyfully accepts':'Respectfully declines';
+    const m=el.querySelector('.msg');if(r.message)m.textContent=r.message;else m.remove();
+    el.querySelector('time').textContent=new Date(r.created_at).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'});
+    el.querySelector('.del').onclick=async()=>{
+      if(!confirm('Delete the reply from '+r.name+'? This cannot be undone.'))return;
+      const {error}=await sb.from('rsvps').delete().eq('id',r.id);
+      if(error){$('appErr').textContent='Could not delete: '+error.message;return}
+      rows=rows.filter(x=>x.id!==r.id);render();
+    };
+    list.append(el);
+  }
+}
+
+function exportCsv(){
+  const esc=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const csv=['Name,Attending,Message,Received'].concat(rows.map(r=>[r.name,r.attending?'Yes':'No',r.message,new Date(r.created_at).toISOString()].map(esc).join(','))).join('\r\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'}));a.download='omar-dalia-rsvps.csv';a.click();URL.revokeObjectURL(a.href);
+}
+
+$('loginView').addEventListener('submit',async e=>{
+  e.preventDefault();$('loginErr').textContent='';$('loginBtn').disabled=true;
+  const {error}=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
+  $('loginBtn').disabled=false;
+  if(error)$('loginErr').textContent=error.message;
+});
+$('logoutBtn').onclick=()=>sb.auth.signOut();
+$('refreshBtn').onclick=load;
+$('csvBtn').onclick=exportCsv;
+$('search').oninput=render;$('filter').onchange=render;
+
+sb.auth.onAuthStateChange((_ev,session)=>{
+  if(session){show('appView');load()}else{rows=[];show('loginView')}
+});
+}
+</script>
+</body>
+</html>

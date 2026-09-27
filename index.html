@@ -84,6 +84,8 @@ section{position:relative;z-index:2}
 .rsvp textarea{min-height:120px;resize:vertical}
 .rsvp button{padding:1rem 3rem;background:transparent;border:1px solid var(--sage);color:var(--sage-dark);font-family:'Josefin Sans',sans-serif;font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;cursor:pointer;border-radius:4px;transition:all .3s}
 .rsvp button:hover{background:var(--sage);color:white}
+.rsvp button:disabled{opacity:.5;cursor:default}
+.rsvp .rsvp-err{font-size:.8rem;color:#B04A3A;min-height:1em}
 .rsvp .thank-you{display:none;font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-style:italic;color:var(--sage-dark)}
 .memories{padding:8rem 2rem;text-align:center;background:linear-gradient(180deg,#F0EBE0,var(--bg))}
 .memories .eyebrow{font-size:.65rem;letter-spacing:.4em;text-transform:uppercase;color:var(--sage-dark);margin-bottom:.5rem}
@@ -140,6 +142,8 @@ footer .bottom{margin-top:4rem;padding-top:2rem;border-top:1px solid rgba(135,16
 </head>
 <body>
 <canvas id="particles"></canvas>
+<script src="supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <section class="hero" id="hero">
 <span class="label">✦ Save the Date ✦</span>
 <h1 class="serif">Omar <em>&amp;</em> Dalia</h1>
@@ -179,7 +183,7 @@ footer .bottom{margin-top:4rem;padding-top:2rem;border-top:1px solid rgba(135,16
 </section>
 <section class="rsvp reveal" id="rsvp">
 <span class="eyebrow">Be with us</span><h2>Kindly Reply</h2>
-<form id="rsvpForm"><input type="text" placeholder="Your Full Name" required id="rsvp-name"><select id="rsvp-attend"><option value="">Will you attend?</option><option value="yes">Joyfully Accept</option><option value="no">Respectfully Decline</option></select><textarea placeholder="A message for the couple (optional)" id="rsvp-msg"></textarea><button type="submit">Send Reply</button></form>
+<form id="rsvpForm"><input type="text" placeholder="Your Full Name" required id="rsvp-name"><select id="rsvp-attend" required><option value="">Will you attend?</option><option value="yes">Joyfully Accept</option><option value="no">Respectfully Decline</option></select><textarea placeholder="A message for the couple (optional)" id="rsvp-msg"></textarea><button type="submit" id="rsvp-btn">Send Reply</button><p class="rsvp-err" id="rsvpErr"></p></form>
 <p class="thank-you" id="thankYou">Thank you, beautifully received.<br>We can't wait to see you in November.</p>
 </section>
 <section class="memories reveal" id="memories">
@@ -211,7 +215,16 @@ reveals.forEach(r=>obs.observe(r));
 const wedding=new Date('2026-11-01T17:30:00');
 function updateCD(){const now=new Date(),diff=wedding-now;if(diff<=0)return;const d=Math.floor(diff/864e5),h=Math.floor(diff%864e5/36e5),m=Math.floor(diff%36e5/6e4),s=Math.floor(diff%6e4/1e3);document.getElementById('cd-days').textContent=String(d).padStart(3,'0');document.getElementById('cd-hours').textContent=String(h).padStart(2,'0');document.getElementById('cd-mins').textContent=String(m).padStart(2,'0');document.getElementById('cd-secs').textContent=String(s).padStart(2,'0')}
 updateCD();setInterval(updateCD,1000);
-document.getElementById('rsvpForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('rsvpForm').style.display='none';document.getElementById('thankYou').style.display='block'});
+const rsvpForm=document.getElementById('rsvpForm'),rsvpBtn=document.getElementById('rsvp-btn'),rsvpErr=document.getElementById('rsvpErr');
+const rsvpDb=window.supabase&&window.SUPABASE_ANON_KEY?supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+rsvpForm.addEventListener('submit',async e=>{e.preventDefault();rsvpErr.textContent='';
+if(!rsvpDb){rsvpErr.textContent='Sorry, replies are not available yet.';return}
+rsvpBtn.disabled=true;rsvpBtn.textContent='Sending…';
+const msg=document.getElementById('rsvp-msg').value.trim();
+const {error}=await rsvpDb.from('rsvps').insert({name:document.getElementById('rsvp-name').value.trim(),attending:document.getElementById('rsvp-attend').value==='yes',message:msg||null});
+rsvpBtn.disabled=false;rsvpBtn.textContent='Send Reply';
+if(error){rsvpErr.textContent='Sorry, something went wrong. Please try again.';console.error(error);return}
+rsvpForm.style.display='none';document.getElementById('thankYou').style.display='block'});
 const musicBtn=document.getElementById('musicBtn'),bgMusic=document.getElementById('bgMusic');let userPaused=false;
 bgMusic.volume=.6;
 bgMusic.addEventListener('play',()=>musicBtn.classList.add('playing'));
