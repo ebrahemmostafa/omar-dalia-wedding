@@ -232,7 +232,8 @@ bgMusic.addEventListener('play',()=>musicBtn.classList.add('playing'));
 bgMusic.addEventListener('pause',()=>musicBtn.classList.remove('playing'));
 function startMusic(){if(!userPaused&&bgMusic.paused)bgMusic.play().catch(()=>{})}
 startMusic();
-['pointerdown','keydown','touchend'].forEach(ev=>document.addEventListener(ev,e=>{if(!musicBtn.contains(e.target))startMusic()},{passive:true}));
+// Browsers only allow sound after a real tap; these are the events iOS/Android accept for that.
+['touchend','pointerup','click','keydown'].forEach(ev=>document.addEventListener(ev,e=>{if(!musicBtn.contains(e.target))startMusic()},{capture:true,passive:true}));
 // Guest uploads → Google Drive via Apps Script (setup: apps-script/README.md)
 const UPLOAD_URL='';
 const CHUNK=8*1024*1024; // must be a multiple of 256 KB
